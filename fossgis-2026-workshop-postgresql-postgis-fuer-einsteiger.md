@@ -18,17 +18,20 @@
 * WhereGroup GmbH
 * Nimrod.Gavish@wheregroup.com
 
+![](img/WhereGroup.png )
+
+* FOSS Academy https://www.foss-academy.com/
+
+![](img/FOSSAcademy.png)
+
+
 ### Original Workshopmaterial: Astrid Emde
 
 * Astrid Emde
 * WhereGroup GmbH
 * astrid.emde@wheregroup.com
 
-![](img/WhereGroup.png )
 
-* FOSS Academy https://www.foss-academy.com/
-
-![](img/FOSSAcademy.png)
 
 
 
