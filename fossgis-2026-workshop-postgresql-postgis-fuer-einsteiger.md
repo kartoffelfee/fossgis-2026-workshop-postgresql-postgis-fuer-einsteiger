@@ -24,7 +24,7 @@
 
 ![](img/FOSSAcademy.png)
 
-
+<br><br><br>
 ### Original Workshopmaterial: Astrid Emde
 
 * Astrid Emde
@@ -32,9 +32,9 @@
 * astrid.emde@wheregroup.com
 
 
+<br><br><br>
 
-
-
+# Womit wird der Workshop durrchgeführt?
 ## OSGeoLive
 
 ![](img/osgeolive.png )
