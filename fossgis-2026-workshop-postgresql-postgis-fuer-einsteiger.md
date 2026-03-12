@@ -464,7 +464,7 @@ SELECT gid, name, st_Area(geom, true) as flaeche
 ```
 <br><br><br>
 
-## Übung 8: Erzeugen Sie eine Sicht, die den Mittelpunkt jedes Landes ausgibt
+## Übung 6: Erzeugen Sie eine Sicht, die den Mittelpunkt jedes Landes ausgibt
 ```
 * Schauen Sie sich die Sicht geometry_columns an. Welcher Geometrietyp und welche Projektion werden angegeben?
 ```
@@ -521,9 +521,8 @@ Schauen Sie sich die Daten in QGIS an. Wo liegt der Mittelpunkt von Frankreich (
 > * http://postgis.net/docs/reference.html#Geometry_Processing
 
 
-#### Übung 11: Puffern Sie die Tabelle populated places mit 10 km
+### Puffern populated places mit 10 km
 
-* Puffern Sie die Tabelle **_ne_10m_populated_places_** mit 10 km
 * http://postgis.net/docs/ST_Buffer.html
 * Beachten Sie, dass Sie den Typ geography nutzen müssen, um einen Puffer in Metern zu erzeugen (nutzen Sie  typecast ::geography)
 
@@ -537,46 +536,12 @@ SELECT
 ```
 
 ```sql
-SELECT a.* 
-  FROM places_buffer_10_km a, places_buffer_10_km b
-  WHERE a.geom && b.geom 
-  AND ST_Intersects(a.geom, b.geom) 
-  AND a.gid != b.gid;
-```
-
-```sql
 CREATE INDEX gist_places_buffer_10_km_geom
   ON places_buffer_10_km 
   USING GIST (geom);
 ```
 
-Führen Sie die Abfrage erneut aus und prüfen Sie, ob der Index verwendet wird.
-
-```sql
-SELECT a.* 
-  FROM places_buffer_10_km a, places_buffer_10_km b
-  WHERE
-  ST_Intersects(a.geom, b.geom) 
-  AND a.gid != b.gid;
-```
-
-```sql
-EXPLAIN ANALYZE
-SELECT a.* 
-  FROM places_buffer_10_km a, places_buffer_10_km b
-  WHERE
-  ST_Intersects(a.geom, b.geom) 
-  AND a.gid != b.gid;
-```
-
-#### Übung 12: ST_UNION - Vereinigen Sie alle Provinzen von Italien zu einer Fläche 
-
-* Erzeugen Sie eine Sicht **_qry_italy_union_**
-* Nutzen Sie ST_UNION http://postgis.net/docs/ST_Union.html
-* Nutzen Sie die Tabelle **_ne_10m_admin_1_states_provinces** und filtern Sie nach admin Italy (admin='Italy') 
-* Fügen Sie die Spalte **_admin_** in Ihre Sicht ein - Sie müssen GROUP BY verwenden
-* Wenden Sie typecast auf die Geometriespalte an
-* Schauen Sie sich das Ergebnis in QGIS an
+### ST_UNION - Vereinigen aller Provinzen Italiens zu einer Fläche 
 
 Version 1: Vereinigung der Bundesländer von Italien über ST_UNION
 ```sql
@@ -608,154 +573,4 @@ SELECT 1 as gid,
 
 ![](img/provinces_union.png)
 
-### ST_Subdivide
-
-* Unterteilt Multi-/Polygone in viele kleinere Polygone
-* Definition der maximalen Stützpunkte (Standardwert ist 256, kann nicht < 8 sein). Die Polygone haben nicht mehr Stützpunkte als max_vertices
-* http://postgis.net/docs/manual-2.4/ST_Subdivide.html
-* Neu ab PostGIS 2.3.0
-
-![](img/provinces_st_subdivide.png)
- 
-
-```sql
-CREATE TABLE provinces_subdivided AS 
-  SELECT 
-  name, 
-  admin, 
-  st_subdivide(geom) AS geom
-  FROM ne_10m_admin_1_states_provinces;
-
-ALTER TABLE provinces_subdivided ADD COLUMN gid serial PRIMARY KEY;
-```
-
-* Mit Definition von max_vertices 20
-
-```sql
-DROP TABLE provinces_subdivided;
-CREATE TABLE provinces_subdivided AS 
-  SELECT 
-  name, 
-  admin, 
-  st_subdivide(geom,20) AS geom
-  FROM ne_10m_admin_1_states_provinces ;
-
-ALTER TABLE provinces_subdivided ADD COLUMN gid serial PRIMARY KEY;
-```
-
-![](img/provinces_st_subdivide.png)
-
-```sql
-CREATE INDEX provinces_subdivided_geom_gist
-  ON provinces_subdivided
-  USING gist
-  (geom);
-
-VACUUM ANALYZE provinces_subdivided;
-```
-
-#### Übung 13: ST_Subdivide
-
-* Manchmal macht es Sinn, große Geometrien für Berechnungen in kleinere Flächen auszuteilen
-* Diese Übung soll dies mit Hilfe einer Funktion veranschaulichen
-* Erzeugen Sie eine neue Funktion **getCountrynameSubdivided()** für die Tabelle **_provinces_subdivided_**
-* Schauen Sie sich EXPLAIN an, um die Performanz zu beurteilen
-
-```sql
-CREATE OR REPLACE FUNCTION getCountrynameSubdivided(mygeometry geometry) 
- RETURNS character varying 
- AS 'SELECT c.name FROM provinces_subdivided c 
- WHERE st_intersects(c.geom,$1);' 
-LANGUAGE 'sql'; 
-```
-
-```sql
-SELECT name, getCountrynameSubdivided(geom) 
- FROM public.ne_10m_populated_places 
- WHERE adm0name = 'Italy';
-```
-
-```sql
-EXPLAIN ANALYZE
-SELECT name, getCountrynameSubdivided(geom) 
- FROM public.ne_10m_populated_places 
- WHERE adm0name = 'Italy';
-```
-
-![](img/explain_analyze.png)
-
-
-```sql
-ALTER TABLE ne_10m_populated_places ADD COLUMN countryname varchar;
-
-UPDATE ne_10m_populated_places 
-SET countryname = getCountrynameSubdivided(geom);
-```
-
-Funktion, die die Originaldaten (Provinzen) nutzt
-
-```sql
-CREATE OR REPLACE FUNCTION getCountryname(mygeometry geometry) 
- RETURNS character varying 
- AS 'SELECT c.name FROM ne_10m_admin_1_states_provinces c 
- WHERE st_intersects(c.geom,$1);' 
-LANGUAGE 'sql'; 
-```
-
-```sql
-EXPLAIN ANALYZE
-SELECT name, getCountryname(geom) 
- FROM public.ne_10m_populated_places;
-```
-
-## PostgreSQL Rollen und Zugriffskontrolle
-
-PostgreSQL unterstützt Rollen (Benutzer mit Login und Rollen ohne Login). Diese Rollen können unterschiedliche Berechtigungen haben und bekommen über GRANT den Zugriff auf die Objekte z.B. Tabellen, Sichten, Schema, Funktionen.
-
-* Siehe CREATE ROLE: https://www.postgresql.org/docs/current/static/sql-createrole.html
-* Siehe GRANT https://www.postgresql.org/docs/current/static/sql-grant.html
-
-
-### Übung 14: Rollen erzeugen und Rechte zuweisen
-
-1. Legen Sie die Rollen **workshop_read** und **workshop_writer** an
-2. Legen Sie die Login-Rolle **robert** mit Passwort an und fügen Sie diese zur Gruppe **workshop_reader** hinzu
-3. Legen Sie die Login-Rolle **wilma** an und fügen Sie diese zur Gruppe **workshop_writer** hinzu
-4. Geben Sie der Gruppe **workshop_reader** Leserechte auf die Tabelle **_ne_10m_admin_1_states_provinces_**
-5. Geben Sie der Gruppe **workshop_writer** Schreibrechte auf die Tabelle **_cities_**
-6. Testen Sie den lesenden und schreibenden Zugriff über QGIS 
-
-```sql
-CREATE ROLE workshop_reader;
-CREATE ROLE workshop_writer;
-
-CREATE ROLE robert WITH LOGIN PASSWORD 'fossgis';
-GRANT workshop_reader TO robert;
-
-CREATE ROLE wilma WITH LOGIN PASSWORD 'fossgis';
-GRANT workshop_writer TO wilma;
-
-GRANT SELECT ON ne_10m_admin_1_states_provinces TO workshop_reader;
--- Wechseln Sie in die Rolle robert
-Select * from ne_10m_admin_1_states_provinces;
-
-GRANT ALL ON cities to workshop_writer;
-GRANT USAGE ON SEQUENCE cities_gid_seq TO workshop_writer;
-
--- Wechseln Sie in die Rolle wilma im pgAdmin
--- Führen Sie das folgende SQL aus
-SELECT * from cities;
-UPDATE cities SET name = 'TEST' WHERE name = 'Berlin';
-SELECT * from cities where name = 'TEST';
-```
-
-## Was kommt als Nächstes?
-
-- PostGIS Raster https://postgis.net/docs/RT_reference.html
-- PostGIS Punktwolken PointCloud https://pgpointcloud.github.io/pointcloud/
-- PostGIS 3D https://postgis.net/docs/reference.html#reference_sfcgal
-- pgRouting https://pgrouting.org/
-- MobilityDB https://github.com/MobilityDB/MobilityDB
-- pg_featureserv PostGIS-only Feature Server https://access.crunchydata.com/documentation/pg_featureserv/latest/
-- pg_tileserv PostGIS-only Tile Server https://access.crunchydata.com/documentation/pg_tileserv/latest/
 
