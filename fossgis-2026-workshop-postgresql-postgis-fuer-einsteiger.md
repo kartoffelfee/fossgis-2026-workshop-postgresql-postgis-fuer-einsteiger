@@ -85,74 +85,77 @@ SELECT version(), postgis_version(), postgis_full_version();
 * OpenStreetMap
  * Datenbank: osm_local
 
-## Zusätzliche Information
+> [!NOTE]
+> ## Zusätzliche Information
+> 
+> * PostGIS in Action (August 2015, 2. Auflage) Regine Obe, Leo Hsu ISBN 9781617291395
+> * Paul Ramsey PostGIS Day 20019 - Everything about PostGIS https://www.youtube.com/watch?v=g4DgAVCmiDE
+> * Paul Ramsey Blog Clever Elephant http://blog.cleverelephant.ca/
+> * MapScaping Podcast Paul Ramsey Spatial SQL - GIS without the GIS https://mapscaping.com/blogs/the-mapscaping-podcast/spatial-sql-gis-without-the-gis
+> * Clever Elephant ;) https://www.youtube.com/watch?v=Gw_Q1JClH58
+> * Postgres OnLine Journal Regine Obe, Leo Hsu http://www.postgresonline.com/
+> * Modern SQL Blog Markus Winand https://modern-sql.com/slides https://use-the-index-luke.com/
+> * PostgreSQL books https://www.postgresql.org/docs/books/
+> * Geomob Podcast - 88. Paul Ramsey: PostGIS turns 20 https://thegeomob.com/podcast/episode-88
+> * PostGIS at 20, The Beginning Paul Ramsey: http://blog.cleverelephant.ca/2021/05/postgis-20-years.html
+> * FOSSGIS 2021 20 Jahre PostGIS - dazu 20 hilfreiche Tipps zu PostGIS und Neuigkeiten rund um das Projekt (Astrid Emde, german) https://pretalx.com/fossgis2021/talk/NL3FAN/
+> * FOSSGIS 2020 Verbindungen schaffen mit PostgreSQL Foreign Data Wrappern (Astrid Emde, german) https://pretalx.com/fossgis2020/talk/ZP3JZZ/
+> * pgRouting: A Practical Guide (Mai 2017, 2. Auflage) Regine Obe, Leo Hsu ISBN: 9780989421737
+> * Information zu Projektionen http://spatialreference.org/
+> * Virtueller PostGIS Day 2021 https://info.crunchydata.com/en/postgis-day-2021
+> 
+> ## Warum lohnt sich der Einsatz einer Datenbank?
+> 
+> * zentrale Datenhaltung - keine Datenredundanz
+> * Konsistenz der Daten
+> * Mehrbenutzer-Zugriff
+> * Kontrollierter Zugriff über Zugriffskontrolle und -management
+> * Zugriff auf die Daten über unterschiedliche Werkzeuge
+> * Kombination von unterschiedlichen Daten - datenbankweit, datenbankübergreifend und auf Fremdquellen
+> * SQL zur Generierung und Analyse der Daten
+> * Backup, Replikation ...
+>   
+> 
+> ## PostgreSQL
+> 
+> * Unterstützt von zahlreichen anderen Programmen
+> * Schnell, leistungsstark, verlässlich, robust
+> * Einfach zu Warten
+> * Folgt SQL Standards
+> * Schnittstelle zu vielen Programmiersprachen
+> * Subselects, Funktions, Trigger, Foreign Data Wrapper, Replikation & mehr
+> * https://www.postgresql.org/about/
+> 
+> 
+> ## PostGIS
+> 
+> * Erweiterung (Extension) für PostgreSQL
+> * PostGIS übernimmt die Arbeit, die sonst das DesktopGIS gemacht hat
+> * Folgt Standards:
+>  * OGC Simple Feature Spezification for SQL 
+>  * OGC ISO SQL/MM Spezification 
+> * Stellt zahlreiche räumliche Funktionen bereit
+> * Breite Unterstützung durch andere Programme
+> * Leichter Import / Export von räumlichen Daten (QGIS DB-Verwaltung, shp2pgsql, pgsql2shp, ogr2ogr, dxf2postgis, osm2pgsql)
+> * Die Vorteile von PostgreSQL können genutzt werden (Benutzerverwaltung, Replication, Indezierung & mehr)
+> * Sehr leistungsstark: Unterstützung von Vektor- & Rasterdaten, geometry (planar Daten) und geography (spheroid), kreisförmige Objekte, 3D-, 4D-Objekte, Punktwolken, Routing über pg_routing, Topologien, Generierung von MVT & GeoJSON
+> * Daten werden als WKB (Well-known Binary) gespeichert. WKT (Well-known text) zur lesbaren Ausgabe.
+> * http://postgis.net/
+> * http://postgis.net/docs/
+> 
+> PostGIS wurde am 21. Mai 2021 zwanzig Jahre alt!
+> 
+> ![](img/elephant_confetti.png)
+> 
+> * Geomob Podcast - 88. Paul Ramsey: PostGIS turns 20 https://thegeomob.com/podcast/episode-88
+> * PostGIS at 20, The Beginning Paul Ramsey: http://blog.cleverelephant.ca/2021/05/postgis-20-years.html
+> 
+> PostGISDay - immer am 3. Donnerstag im November
+> 
+> * https://twitter.com/search?q=PostGISDay
+> * https://postgisday.rocks/
 
-* PostGIS in Action (August 2015, 2. Auflage) Regine Obe, Leo Hsu ISBN 9781617291395
-* Paul Ramsey PostGIS Day 20019 - Everything about PostGIS https://www.youtube.com/watch?v=g4DgAVCmiDE
-* Paul Ramsey Blog Clever Elephant http://blog.cleverelephant.ca/
-* MapScaping Podcast Paul Ramsey Spatial SQL - GIS without the GIS https://mapscaping.com/blogs/the-mapscaping-podcast/spatial-sql-gis-without-the-gis
-* Clever Elephant ;) https://www.youtube.com/watch?v=Gw_Q1JClH58
-* Postgres OnLine Journal Regine Obe, Leo Hsu http://www.postgresonline.com/
-* Modern SQL Blog Markus Winand https://modern-sql.com/slides https://use-the-index-luke.com/
-* PostgreSQL books https://www.postgresql.org/docs/books/
-* Geomob Podcast - 88. Paul Ramsey: PostGIS turns 20 https://thegeomob.com/podcast/episode-88
-* PostGIS at 20, The Beginning Paul Ramsey: http://blog.cleverelephant.ca/2021/05/postgis-20-years.html
-* FOSSGIS 2021 20 Jahre PostGIS - dazu 20 hilfreiche Tipps zu PostGIS und Neuigkeiten rund um das Projekt (Astrid Emde, german) https://pretalx.com/fossgis2021/talk/NL3FAN/
-* FOSSGIS 2020 Verbindungen schaffen mit PostgreSQL Foreign Data Wrappern (Astrid Emde, german) https://pretalx.com/fossgis2020/talk/ZP3JZZ/
-* pgRouting: A Practical Guide (Mai 2017, 2. Auflage) Regine Obe, Leo Hsu ISBN: 9780989421737
-* Information zu Projektionen http://spatialreference.org/
-* Virtueller PostGIS Day 2021 https://info.crunchydata.com/en/postgis-day-2021
 
-## Warum lohnt sich der Einsatz einer Datenbank?
-
-* zentrale Datenhaltung - keine Datenredundanz
-* Konsistenz der Daten
-* Mehrbenutzer-Zugriff
-* Kontrollierter Zugriff über Zugriffskontrolle und -management
-* Zugriff auf die Daten über unterschiedliche Werkzeuge
-* Kombination von unterschiedlichen Daten - datenbankweit, datenbankübergreifend und auf Fremdquellen
-* SQL zur Generierung und Analyse der Daten
-* Backup, Replikation ...
-  
-
-## PostgreSQL
-
-* Unterstützt von zahlreichen anderen Programmen
-* Schnell, leistungsstark, verlässlich, robust
-* Einfach zu Warten
-* Folgt SQL Standards
-* Schnittstelle zu vielen Programmiersprachen
-* Subselects, Funktions, Trigger, Foreign Data Wrapper, Replikation & mehr
-* https://www.postgresql.org/about/
-
-
-## PostGIS
-
-* Erweiterung (Extension) für PostgreSQL
-* PostGIS übernimmt die Arbeit, die sonst das DesktopGIS gemacht hat
-* Folgt Standards:
- * OGC Simple Feature Spezification for SQL 
- * OGC ISO SQL/MM Spezification 
-* Stellt zahlreiche räumliche Funktionen bereit
-* Breite Unterstützung durch andere Programme
-* Leichter Import / Export von räumlichen Daten (QGIS DB-Verwaltung, shp2pgsql, pgsql2shp, ogr2ogr, dxf2postgis, osm2pgsql)
-* Die Vorteile von PostgreSQL können genutzt werden (Benutzerverwaltung, Replication, Indezierung & mehr)
-* Sehr leistungsstark: Unterstützung von Vektor- & Rasterdaten, geometry (planar Daten) und geography (spheroid), kreisförmige Objekte, 3D-, 4D-Objekte, Punktwolken, Routing über pg_routing, Topologien, Generierung von MVT & GeoJSON
-* Daten werden als WKB (Well-known Binary) gespeichert. WKT (Well-known text) zur lesbaren Ausgabe.
-* http://postgis.net/
-* http://postgis.net/docs/
-
-PostGIS wurde am 21. Mai 2021 zwanzig Jahre alt!
-
-![](img/elephant_confetti.png)
-
-* Geomob Podcast - 88. Paul Ramsey: PostGIS turns 20 https://thegeomob.com/podcast/episode-88
-* PostGIS at 20, The Beginning Paul Ramsey: http://blog.cleverelephant.ca/2021/05/postgis-20-years.html
-
-PostGISDay - immer am 3. Donnerstag im November
-
-* https://twitter.com/search?q=PostGISDay
-* https://postgisday.rocks/
 
 ## Datenbank-Clients
 
@@ -163,17 +166,17 @@ PostGISDay - immer am 3. Donnerstag im November
 * und viele mehr
 
 
+> [!TIP]
+> ### Übung 1: pgAdmin und erste Schritte im Umgang mit der Datenbank
+>
+> 1. Öffnen Sie pgAdmin über Start -> Geospatial -> Datenbank -> pgAdmin4 (Passwort: user)
+> 2. Stellen Sie eine Verbindung zur Datenbank **_natural_earth2_** her
+> 3. Gehen Sie in das Schema **_public_** und schauen Sie sich die Tabellen an
+> 4. Öffnen Sie eine Tabelle und schauen Sie sich die Geometriespalte (geom) an. Können Sie die Geometrie lesen?
+> 5. Öffnen Sie die Tabelle **_spatial_ref_sys_** und filtern Sie nach srid = 4326
+> 7. Gehen Sie zu public -> views (Ansichten) und öffnen Sie die Metadaten-Sicht **_geometry_columns_**
 
-### Übung 1: pgAdmin und erste Schritte im Umgang mit der Datenbank
 
-1. Öffnen Sie pgAdmin über Start -> Geospatial -> Datenbank -> pgAdmin4 (Passwort: user)
-2. Stellen Sie eine Verbindung zur Datenbank **_natural_earth2_** her
-3. Gehen Sie in das Schema **_public_** und schauen Sie sich die Tabellen an
-4. Öffnen Sie eine Tabelle und schauen Sie sich die Geometriespalte (geom) an. Können Sie die Geometrie lesen?
-5. Öffnen Sie die Tabelle **_spatial_ref_sys_** und filtern Sie nach srid = 4326
-7. Gehen Sie zu public -> views (Ansichten) und öffnen Sie die Metadaten-Sicht **_geometry_columns_**
-
-![](img/pgadmin_pg_query.png)
 
 ## Wie erfolgt die Kommunikation mit der Datenbank?
 
