@@ -4,7 +4,7 @@ Konferenz-Website https://www.fossgis-konferenz.de/2023/
 
 [FOSSGIS 2023 Workshop-Ankündigung](https://pretalx.com/fossgis2023/talk/MJGEZE/)
 
-![](img/fossgis23-logo.png ) ![](img/postgresql_postgis.png)
+![]([img/fossgis23-logo.png](https://www.fossgis.de/wiki/Datei:FOSSGIS_26_oHG_RGB_.png) ) ![](img/postgresql_postgis.png)
 
 
 -> hier geht es zum Workshop 
