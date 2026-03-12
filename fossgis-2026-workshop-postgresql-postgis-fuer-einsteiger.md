@@ -147,8 +147,15 @@ SELECT version(), postgis_version(), postgis_full_version();
 
 <br><br><br>
 
+## Was ist überhaupt eine Datenbank? Was ist PostgreSQL?
+* Eine Datenbank ist ein digitales Repository zum Speichern, Verwalten und Sichern organisierter Datensammlungen.
+* Eine Datenbank ist ein abgeschlossenes System
+* PostgreSQL ist ein Relationales Datenbank Management System (RDBMS)
+  * kann eine oder mehrere Datenbanken beinhalten
+  * jede Datebank hat eigene Tabellen, Funktionen, Erweiterungen etc. -> Datenbankobjekte
+ 
+  
 ## Datenbank-Clients
-
 * pgAdmin 4 https://www.pgadmin.org/
 * psql kommandozeilen basierter Client https://www.postgresql.org/docs/current/static/app-psql.html
 * QGIS DB-Verwaltung - integriert in QGIS
@@ -412,7 +419,7 @@ SELECT ST_AsText(geom) FROM cities; -- mit SRID
 SELECT ST_AsEWKT(geom) FROM cities; -- ohne SRID
 ``` 
 
-### Funktionen zur Geometriegenerierung (Geometry Constructors)
+## Funktionen zur Geometriegenerierung (Geometry Constructors)
 
 * Es gibt zahlreiche Funktionen zum Erzeugen von Geometrien 
 * siehe Geometry Constructors http://postgis.net/docs/reference.html#Geometry_Constructors
@@ -519,7 +526,7 @@ Schauen Sie sich die Daten in QGIS an. Wo liegt der Mittelpunkt von Frankreich (
 > 
 > * Es gibt zahlreiche Funktionen zur Geometrieprozessierung z.B. Puffern, Verschneiden, Vereinigen, Teilen
 > * http://postgis.net/docs/reference.html#Geometry_Processing
-
+  
 
 ### Puffern populated places mit 10 km
 
