@@ -1,6 +1,6 @@
 # Workshop PostgreSQL/PostGIS für Einsteiger
 
-[FOSSGIS 2023 Berlin Workshop 16. März 2023](https://www.fossgis-konferenz.de/2023/)
+[FOSSGIS 2026 Göttingen Workshop 25. März 2026](https://www.fossgis-konferenz.de/2026/)
 
 ![](img/fossgis23-logo.png ) ![](img/postgresql_postgis.png)
 
@@ -14,17 +14,15 @@
 * WhereGroup GmbH 
 * joerg.thomsen@wheregroup.com
 
-## Annika Schmidt
-
+## Nimrod Gavish
 * WhereGroup GmbH
-* annika.schmidt@wheregroup.com
+* Nimrod.Gavish@wheregroup.com
 
-## Workshopmaterial Astrid Emde
+### Original Workshopmaterial: Astrid Emde
 
 * Astrid Emde
 * WhereGroup GmbH
 * astrid.emde@wheregroup.com
-* [@astroidex](https://twitter.com/astroidex)
 
 ![](img/WhereGroup.png )
 
@@ -33,21 +31,12 @@
 ![](img/FOSSAcademy.png)
 
 
-## Die Themen
-* Warum lohnt sich der Einsatz einer Datenbank?
-* PostgreSQL / PostGIS
-* SQL-Einführung
-* Import / Export von Daten
-* Räumliche Funktionen
-* Räumlicher Index
-* Rollen & Kontrolle über den Zugriff auf die Daten
-
 
 ## OSGeoLive
 
 ![](img/osgeolive.png )
 
-Dieser Workshop nutzt OSGeoLive (https://live.osgeo.org) Version 15.0 (Release Oktober 2022). OSGeoLive basiert auf Lubuntu 22.04 Jammy Jellyfish und beinhaltet eine Kollektion aus nahezu 50 vorinstallierten Software-Projekten. OSGeoLive beinhaltet außerdem Beispieldaten, die für diesen Workshop verwendet werden.
+Dieser Workshop nutzt OSGeoLive (https://live.osgeo.org) Version 17.0 (Release Januar 2026 -https://osgeo.github.io/OSGeoLive-doc/en/index.html) in einer für die FOSGIS 2026 angepassten Variante (https://cloud.fossgis.de/s/Ba5yDcq5R6HGySD). OSGeoLive basiert auf Lubuntu und beinhaltet eine Kollektion aus nahezu 50 vorinstallierten Software-Projekten. OSGeoLive beinhaltet außerdem Beispieldaten, die für diesen Workshop verwendet werden.
 
 ![](img/osgeolive_menu.png)
 
@@ -61,14 +50,14 @@ OSGeoLive kann über den folgenden Link heruntergeladen werden. Sie können OSGe
 
 ## Aktuelle Software Version 
 
-* PostgreSQL 15.2 (2023-02-09) https://www.postgresql.org/
-* PostGIS 3.3.2 (2022-11-13) https://postgis.net/
+* PostgreSQL 18.2 (2025-02-09) https://www.postgresql.org/
+* PostGIS 3.6 (2025) https://postgis.net/
 
 
 ### OSGeoLive 15.0
 
-* PostgreSQL 14.4
-* PostGIS 3.2.0
+* PostgreSQL 16.13
+* PostGIS 3.5.0
 
 ```sql
 SELECT version(), postgis_version(), postgis_full_version();
@@ -84,6 +73,8 @@ SELECT version(), postgis_version(), postgis_full_version();
  * Datenbank: natural_earth2
 * OpenStreetMap
  * Datenbank: osm_local
+
+<br><br><br>
 
 > [!NOTE]
 > ## Zusätzliche Information
@@ -147,7 +138,6 @@ SELECT version(), postgis_version(), postgis_full_version();
 > 
 > ![](img/elephant_confetti.png)
 > 
-> * Geomob Podcast - 88. Paul Ramsey: PostGIS turns 20 https://thegeomob.com/podcast/episode-88
 > * PostGIS at 20, The Beginning Paul Ramsey: http://blog.cleverelephant.ca/2021/05/postgis-20-years.html
 > 
 > PostGISDay - immer am 3. Donnerstag im November
@@ -155,7 +145,7 @@ SELECT version(), postgis_version(), postgis_full_version();
 > * https://twitter.com/search?q=PostGISDay
 > * https://postgisday.rocks/
 
-
+<br><br><br>
 
 ## Datenbank-Clients
 
@@ -165,197 +155,14 @@ SELECT version(), postgis_version(), postgis_full_version();
 * DBeaver https://dbeaver.io/
 * und viele mehr
 
-
-> [!TIP]
-> ### Übung 1: pgAdmin und erste Schritte im Umgang mit der Datenbank
->
-> 1. Öffnen Sie pgAdmin über Start -> Geospatial -> Datenbank -> pgAdmin4 (Passwort: user)
-> 2. Stellen Sie eine Verbindung zur Datenbank **_natural_earth2_** her
-> 3. Gehen Sie in das Schema **_public_** und schauen Sie sich die Tabellen an
-> 4. Öffnen Sie eine Tabelle und schauen Sie sich die Geometriespalte (geom) an. Können Sie die Geometrie lesen?
-> 5. Öffnen Sie die Tabelle **_spatial_ref_sys_** und filtern Sie nach srid = 4326
-> 7. Gehen Sie zu public -> views (Ansichten) und öffnen Sie die Metadaten-Sicht **_geometry_columns_**
-
-
-
-## Wie erfolgt die Kommunikation mit der Datenbank?
-
-* über SQL - Structured Query Language
-* DDL - data definition language
-* DML - data manipulation language
-* DQL - data query language 
-
-
-### DQL
-
-* DQL - zur Abfrage von Daten (DQL ist ein Teil der DML) 
-z.B. zur Anzeige aller Daten aus der Tabelle **_spatial_ref_sys_**, bei denen srid = 4326 ist.
-
-```sql
-SELECT * FROM spatial_ref_sys WHERE srid=4326;
+<br><br>
+### Übung 1: pgAdmin und erste Schritte im Umgang mit der Datenbank
 ```
-
-### DDL 
-
-* DDL zur Erzeugung von neuen Strukturen wie Datenbanken, Tabellen, Rollen, Schemata & mehr.
-
-```sql
-CREATE DATABASE demo;
-```
-
-* Verbinden Sie sich mit der Datenbank **_demo_**. Frischen Sie 
-dazu die Liste der Datenbanken auf und wählen Sie anschließend die Datenbank **_demo_** aus.
-
-
-* Laden Sie die Erweiterung **_postgis_**.
-
-```sql
-CREATE EXTENSION postgis;
-```
-
-* Erzeugen Sie die Tabelle **_poi_**.
-
-```sql
-CREATE TABLE pois(
- gid serial PRIMARY KEY,
- name varchar,
- year int,
- info varchar
-);
-```
-
-Änderungen der Tabellenstruktur
-
-```sql
-ALTER TABLE pois ADD COLUMN land varchar;
-ALTER TABLE pois RENAME land TO country;
-ALTER TABLE pois DROP COLUMN country;
-ALTER TABLE pois ADD CONSTRAINT pk_gid PRIMARY KEY (gid); 
-```
-
-Löschen einer Tabelle
-
-```sql
-DROP TABLE pois;
-```
-
-### DML
-
-* Manipulation von Daten - Erzeugen, Löschen, Verändern von Daten
-
-```sql
-INSERT INTO pois (name, year, info) VALUES 
-(
-'Kölner Dom',
-1248,
-'https://en.wikipedia.org/wiki/Cologne_Cathedral'
-);
-```
-
-```sql
-UPDATE pois SET name = 'Cologne Cathedral' WHERE name = 'Kölner Dom';
-```
-
-
-```sql
--- Löscht Datensätze mit name "Cologne Cathedral"
-DELETE FROM pois WHERE name = 'Cologne Cathedral';
--- Löscht alle Datensätze der Tabelle
-DELETE FROM pois; 
--- Löscht Datensätze mit gid > 1111
-DELETE FROM pois WHERE gid > 1111;
-```
-
-### Übung 2: Erzeugen einer Datenbank mit PostGIS-Erweiterung
-
-1. Legen Sie eine Datenbank mit dem Namen **_fossgis_** an
-
-Hinweis: Nutzen Sie Kleinbuchstaben und keine Leerzeichen für den Namen von Datenbanken, Tabellen und Spalten! Dies erleichtert den Umgang, da Sie dann keine Anführungszeichen (") nutzen müssen (bei Großschreibweise "FOSSGIS")
-
-2. Verbinden Sie sich mit Ihrer Datenbank
-
-3. Laden Sie die Erweiterung **_postgis_**.
-
-4. Prüfen Sie, ob die PostGIS-Funktionen, die Tabelle **_spatial_ref_sys_** und die Metadaten-Sichten vorliegen
-
-
-```sql
-CREATE DATABASE fossgis;
-```
-
-Wechseln zur Datenbank fossgis
-```sql
-CREATE EXTENSION postgis;
-```
-
-
-### Übung 3: Datenbankhilfsprogramme. Nutzung von createdb zum Anlegen einer Datenbank
-
-* Prüfen Sie das PostGIS-Quickstart und finden Sie heraus, wie die Datenbank **_demo_** angelegt wurde
-* https://live.osgeo.org/de/quickstart/postgis_quickstart.html
-* PostgreSQL stellt diverse Hilfsprogramme bereit - wie createdb, dropdb, createuser, vacuumdb, pg_dump, pg_restore & mehr. Der Aufruf erfolgt über die Kommandozeile
-
-```sql
-createdb -U user -e demo
-createdb --help
-
-psql -U user demo
-CREATE EXTENSION postgis;
-\q
-
-dropdb -U user demo
-```
-
-### Übung 4: Erzeugen und befüllen Sie die Tabelle cities
-
-* Erzeugen Sie eine neuen Tabelle mit dem Namen **_cities_** mit den Spalten gid, name, country und geom (orientieren Sie sich dazu an dem Beispiel der Tabelle **_pois_**)
-* Fügen Sie den Datensatz für Berlin mit Hilfe der Funktion ST_MakePoint in die Tabelle ein (https://postgis.net/docs/ST_MakePoint.html)
-* Ermitteln Sie die Koordinate über https://www.laengengrad-breitengrad.de/
-
-
-```sql
-CREATE TABLE cities(
- gid serial PRIMARY KEY,
- name varchar,
- country varchar,
- geom geometry(point,4326)
-);
-```
-
-```sql
-INSERT INTO cities(
-            name, geom, country)
-    VALUES ('Firenze',ST_SetSRID(ST_MakePoint(11.256944,43.773056),4326),'Italy');
-```
-
-```sql
-INSERT INTO cities(
-            name, geom, country)
-    VALUES ('Buenos Aires',ST_SetSRID(ST_MakePoint(-58.394002,-34.581619),4326),'Argentina');
-```
-
-```sql
-INSERT INTO cities(
-            name, geom, country)
-    VALUES ('Bucharest',ST_SetSRID(ST_MakePoint(26.096306 , 44.439663),4326),'Romania');
-```
-
-```sql
-INSERT INTO cities(
-            name, geom, country)
-    VALUES ('Dar es Salaam',ST_SetSrid(ST_MakePoint(39.273933, -6.812810),4326),'Tanzania');
-```
-
-```sql
-INSERT INTO cities(
-            name, geom, country)
-    VALUES ('Cologne',ST_SetSRID(ST_MakePoint(6.958307 , 50.941357),4326),'Germany');
-```
-
-```sql
-INSERT INTO cities(
-            name, geom, country)
-    VALUES ('Berlin',ST_SetSrid(ST_MakePoint(13.41053 , 52.52437),4326),'Germany');
+1. Öffnen Sie pgAdmin über Start -> Geospatial -> Datenbank -> pgAdmin4 (Passwort: user)
+2. Die auf dem Rechner vorhandenen Datenbanken sind bereits eingebunden
+3. Gehen Sie in der Datenbank natiuralearth2 das Schema public und schauen Sie sich die Tabelle ne_10_lakes an
+4. Öffnen Sie die Tabelle und schauen Sie sich die Geometriespalte (geom) an. Können Sie die Geometrie lesen?
+5. Sehen Sie sich die Seen im Geometry Viewer an
 ```
 
 ### Well-Known Text Format (WKT) und Well-Known Binary Format (WKB) 
@@ -370,9 +177,177 @@ http://postgis.net/docs/using_postgis_dbmanagement.html#OpenGISWKBWKT
 ST_AsEWKT oder ST_AsText zur Anzeige der Geometrie als Text
 
 ```sql
-SELECT ST_AsText(geom), geom FROM cities; -- mit SRID
-SELECT ST_AsEWKT(geom), geom FROM cities; -- ohne SRID
+SELECT ST_AsText(geom), geom FROM ne_10_lakes; -- mit SRID
+SELECT ST_AsEWKT(geom), geom FROM ne_10_lakes; -- ohne SRID
+```
+<br><br><br>
+
+> [!NOTE]
+> ## Zusätzliche Information
+> ### Wie erfolgt die Kommunikation mit der Datenbank?
+> 
+> * über SQL - Structured Query Language
+> * DDL - data definition language
+> * DML - data manipulation language
+> * DQL - data query language 
+> 
+> 
+> ### DQL
+> 
+> * DQL - zur Abfrage von Daten (DQL ist ein Teil der DML) 
+> z.B. zur Anzeige aller Daten aus der Tabelle **_spatial_ref_sys_**, bei denen srid = 4326 ist.
+> 
+> ```sql
+> SELECT * FROM spatial_ref_sys WHERE srid=4326;
+> ```
+> 
+> ### DDL 
+> 
+> * DDL zur Erzeugung von neuen Strukturen wie Datenbanken, Tabellen, Rollen, Schemata & mehr.
+> 
+> ```sql
+> CREATE DATABASE demo;
+> ```
+> 
+> * Verbinden Sie sich mit der Datenbank **_demo_**. Frischen Sie 
+> dazu die Liste der Datenbanken auf und wählen Sie anschließend die Datenbank **_demo_** aus.
+> 
+> 
+> * Laden Sie die Erweiterung **_postgis_**.
+> 
+> ```sql
+> CREATE EXTENSION postgis;
+> ```
+> 
+> * Erzeugen Sie die Tabelle **_poi_**.
+> 
+> ```sql
+> CREATE TABLE pois(
+>  gid serial PRIMARY KEY,
+>  name varchar,
+>  year int,
+>  info varchar
+> );
+> ```
+> 
+> Änderungen der Tabellenstruktur
+> 
+> ```sql
+> ALTER TABLE pois ADD COLUMN land varchar;
+> ALTER TABLE pois RENAME land TO country;
+> ALTER TABLE pois DROP COLUMN country;
+> ALTER TABLE pois ADD CONSTRAINT pk_gid PRIMARY KEY (gid); 
+> ```
+> 
+> Löschen einer Tabelle
+> 
+> ```sql
+> DROP TABLE pois;
+> ```
+> 
+> ### DML
+> 
+> * Manipulation von Daten - Erzeugen, Löschen, Verändern von Daten
+> 
+> ```sql
+> INSERT INTO pois (name, year, info) VALUES 
+> (
+> 'Kölner Dom',
+> 1248,
+> 'https://en.wikipedia.org/wiki/Cologne_Cathedral'
+> );
+> ```
+> 
+> ```sql
+> UPDATE pois SET name = 'Cologne Cathedral' WHERE name = 'Kölner Dom';
+> ```
+> 
+> 
+> ```sql
+> -- Löscht Datensätze mit name "Cologne Cathedral"
+> DELETE FROM pois WHERE name = 'Cologne Cathedral';
+> -- Löscht alle Datensätze der Tabelle
+> DELETE FROM pois; 
+> -- Löscht Datensätze mit gid > 1111
+> DELETE FROM pois WHERE gid > 1111;
+> ```
+
+<br><br><br>
+
+### Übung 2: Erzeugen einer Datenbank mit PostGIS-Erweiterung
 ``` 
+1. Legen Sie eine Datenbank mit dem Namen fossgis an
+   Hinweis: Nutzen Sie Kleinbuchstaben und keine Leerzeichen für den Namen von Datenbanken,
+   Tabellen und Spalten! Dies erleichtert den Umgang, da Sie dann keine Anführungszeichen (")
+   nutzen müssen (bei Großschreibweise "FOSSGIS")
+2. Verbinden Sie sich mit Ihrer Datenbank
+3. Laden Sie die Erweiterung postgis
+``` 
+```sql
+CREATE DATABASE fossgis;
+```
+```
+4. Wechseln zur Datenbank fossgis
+```
+```sql
+CREATE EXTENSION postgis;
+```
+
+<br><br><br>
+
+### Übung 4: Erzeugen und befüllen Sie die Tabelle cities
+``` 
+Erzeugen Sie eine neuen Tabelle mit dem Namen cities mit den Spalten gid, name, country und geom an,
+erstellen sie einen Index auf der Geometriesaplte und
+befüllen sie die Tabelle per SQL mit ein paar Einträgen
+```
+```sql
+CREATE TABLE cities(
+    gid serial PRIMARY KEY,
+    name varchar,
+    country varchar,
+    geom geometry(point,4326)
+    );
+
+CREATE INDEX idx_cities_geom ON public.cities USING gist (geom);
+```
+```sql
+INSERT INTO cities(name, geom, country)
+    VALUES ('Firenze',ST_SetSRID(ST_MakePoint(11.256944,43.773056),4326),'Italy');
+```
+```sql
+INSERT INTO cities(name, geom, country)
+    VALUES ('Buenos Aires',ST_SetSRID(ST_MakePoint(-58.394002,-34.581619),4326),'Argentina');
+```
+```sql
+INSERT INTO cities(name, geom, country)
+    VALUES ('Bucharest',ST_SetSRID(ST_MakePoint(26.096306 , 44.439663),4326),'Romania');
+```
+```sql
+INSERT INTO cities(name, geom, country)
+    VALUES ('Dar es Salaam',ST_SetSrid(ST_MakePoint(39.273933, -6.812810),4326),'Tanzania');
+```
+```sql
+INSERT INTO cities(name, geom, country)
+    VALUES ('Cologne',ST_SetSRID(ST_MakePoint(6.958307 , 50.941357),4326),'Germany');
+```
+```sql
+INSERT INTO cities(name, geom, country)
+    VALUES ('Berlin',ST_SetSrid(ST_MakePoint(13.41053 , 52.52437),4326),'Germany');
+```
+
+```sql
+-- Man kann auch mehrere Datensätze aufeinmal einfügen:
+-- die beiden -- leiten übrigens einen Kommenatar in einem SQL-Skript ein
+INSERT INTO cities(name, geom, country)
+    VALUES 
+  	('Firenze',ST_SetSRID(ST_MakePoint(11.256944,43.773056),4326),'Italy'),
+	  ('Buenos Aires',ST_SetSRID(ST_MakePoint(-58.394002,-34.581619),4326),'Argentina'),
+	  ('Bucharest',ST_SetSRID(ST_MakePoint(26.096306 , 44.439663),4326),'Romania'),
+	  ('Dar es Salaam',ST_SetSrid(ST_MakePoint(39.273933, -6.812810),4326),'Tanzania'),
+	  ('Cologne',ST_SetSRID(ST_MakePoint(6.958307 , 50.941357),4326),'Germany'),
+	  ('Berlin',ST_SetSrid(ST_MakePoint(13.41053 , 52.52437),4326),'Germany');
+```
 
 
 ## QGIS zur Anzeige der Daten
@@ -382,75 +357,59 @@ SELECT ST_AsEWKT(geom), geom FROM cities; -- ohne SRID
 
 ![](img/qgis_db_connection.png)
  
-
 ### Übung 5: QGIS: Anzeige von Daten aus der Datenbank **_natural_earth2_** und fossgis
-
-1. Öffnen Sie QGIS (*Geospatial -> DesktopGIS -> QGIS*) und erstellen Sie ein neues QGIS-Projekt
-Laden Sie die Ländergrenzen, Bundesländer, städtische Bereiche (urban areas) und Ortschaften (populated places) aus der Datenbank **_natural_earth2_**
-2. Legen Sie eine neue PostGIS-Verbindung für Ihre neue Datenbank **_fossgis_** an
-3. Laden Sie die neuen Tabelle **_cities_**
-4. Fügen Sie über die QGIS Digitalisierung einen neuen Punkt in Ihre Tabelle **_cities_** für Ihren Wohnort ein.
-
+``` 
+1. Öffnen Sie QGIS (Geospatial -> DesktopGIS -> QGIS) und erstellen Sie ein neues QGIS-Projekt
+2. Laden Sie die Ländergrenzen, Bundesländer, städtische Bereiche (urban areas) und Ortschaften
+   (populated places) aus der Datenbank natural_earth2
+3. Legen Sie eine neue PostGIS-Verbindung für Ihre neue Datenbank fossgis an
+4. Laden Sie die neuen Tabelle cities
+5. Fügen Sie über die QGIS Digitalisierung einen neuen Punkt in Ihre Tabelle cities für Ihren
+   Wohnort und Göttingen ein.
+6. Überürfen Sie in pgAdmin die neuen Einträge in der Tabelle
+``` 
 ![](img/qgis_cities.png)
+<br><br><br>
+> [!NOTE]
+> ## QGIS: Import von Daten nach PostgreSQL über die QGIS DB-Verwaltung
+> 
+> Die QGIS DB-Verwaltung bietet eine komfortable Möglichkeit zum Import und Export von Daten. Sie finden die QGIS DB-Verwaltung im Menü unter *Databanken -> DB-Verwaltung*. Sie benötigen einen Datenbankverbindung für den Zugriff auf die Daten.
+> 
+> Laden Sie die Daten, die Sie laden möchten, am Besten in ein QGIS-Projekt. Die Daten können auch gefiltert werden, so dass Sie auch nur einen Auszug der Daten in die Datenbank laden können.
+> 
+> Der Import erfolgt über die folgenden Schritte:
+> 
+> 1. Öffnen Sie die QGIS DB-Verwaltung
+> 1. Verbinden Sie sich mit Ihrer Datenbank
+> 1. Wählen Sie den **Import**-Button
+> 1. Wählen Sie die Daten für den Import aus
+> 1. Definieren Sie einen Namen für die Tabelle, den EPSG-Code und fügen Sie einen Primärschlüssel hinzu
+> 1. Erzeugen Sie einen räumlichen Index
+> 1. Starten Sie den Import
+> 1. Fügen Sie die Daten nach dem Import per drag & drop in Ihr QGIS-Projekt
+> 
+> ![](img/qgis_db_manager_import.png)
+>  
+> 
+> ## QGIS: Erstellen von Tabellen via QGIS
+> 
+> Neue Tabellen können ganz einfach auch in QGIS erstellt werden. Dies erfolgt über die DB-Verwaltung unter dem Menüpunkt **_Tabelle -> Tabelle erzeugen_**.
+> 
+> ![](img/qgis_create_table.png)
 
+<br><br><br><br><br><br>
 
-## QGIS: Import von Daten nach PostgreSQL über die QGIS DB-Verwaltung
-
-Die QGIS DB-Verwaltung bietet eine komfortable Möglichkeit zum Import und Export von Daten. Sie finden die QGIS DB-Verwaltung im Menü unter *Databanken -> DB-Verwaltung*. Sie benötigen einen Datenbankverbindung für den Zugriff auf die Daten.
-
-Laden Sie die Daten, die Sie laden möchten, am Besten in ein QGIS-Projekt. Die Daten können auch gefiltert werden, so dass Sie auch nur einen Auszug der Daten in die Datenbank laden können.
-
-Der Import erfolgt über die folgenden Schritte:
-
-1. Öffnen Sie die QGIS DB-Verwaltung
-1. Verbinden Sie sich mit Ihrer Datenbank
-1. Wählen Sie den **Import**-Button
-1. Wählen Sie die Daten für den Import aus
-1. Definieren Sie einen Namen für die Tabelle, den EPSG-Code und fügen Sie einen Primärschlüssel hinzu
-1. Erzeugen Sie einen räumlichen Index
-1. Starten Sie den Import
-1. Fügen Sie die Daten nach dem Import per drag & drop in Ihr QGIS-Projekt
-
-![](img/qgis_db_manager_import.png)
- 
-
-### Übung 6: Laden von natural_earth2-Shapes in Ihre Datenbank
-
-* Importieren Sie die Datei ne_10m_admin_0_countries.shp in die Tabelle **_ne_10m_admin_0_countries_**
-* Importieren Sie die Datei ne_10m_admin_1_states_provinces.shp in die Tabelle **_ne_10m_admin_1_states_provinces_**
-* Importieren Sie lediglich die Bundesländer von Deutschland in die Tabelle **_provinces_brd_** (nutzen Sie den Filter admin='Germany')
-* Importieren Sie die Shape-Datei ne_10m_populated_places.shp in die Tabelle **_ne_10m_populated_places_**
-* Schauen Sie sich die Metadaten-Sicht **_geometry_columns_** an
-
-
-
-## QGIS: Erstellen von Tabellen via QGIS
-
-Neue Tabellen können ganz einfach auch in QGIS erstellt werden. Dies erfolgt über die DB-Verwaltung unter dem Menüpunkt **_Tabelle -> Tabelle erzeugen_**.
-
-![](img/qgis_create_table.png)
-
-
-### Übung 7: Erstellen der Tabelle standorte via QGIS
-
-* Erstellen Sie in der Datenbank fossgis via QGIS eine einfache Tabelle **_locations_** für die Austragungsort der FOSSGIS. Die Tabelle benötigt eine eindeutige ID, eine Spalte für den Ort, das Land und das Jahr und eine Geometriespate (POINT, SRID 4326). Erzeugen Sie direkt bei der Erstellung der Tabelle einen räumlichen Index.
-* Erfassen Sie einen Punkt für die FOSSGIS 2023 in Berlin.
-* Schauen Sie sich die Tabelle anschließend in pgAdmin an.
-
-Hinweis: Über QGIS können sehr einfach auch ohne SQL-Kenntnisse Tabellen in der Datenbank erstellt werden.
-
-## PostGIS-Funktionen in Aktion
+# PostGIS-Funktionen in Aktion
 
 * PostGIS Dokumentation http://postgis.net/docs/
 * PostGIS Vector Functions see Chapter 8: http://postgis.net/docs/reference.html
 * PostGIS deutschsprachige Dokumentation http://www.postgis.net/docs/postgis-de.html
 
-### ST_AsEWKT oder ST_AsText zur Anzeige der Geometrie als Text
+## ST_AsEWKT oder ST_AsText zur Anzeige der Geometrie als Text
 
 ```sql
 SELECT ST_AsText(geom) FROM cities; -- mit SRID
 SELECT ST_AsEWKT(geom) FROM cities; -- ohne SRID
-SELECT ST_AsEWKT(geom) FROM provinces_brd;
 ``` 
 
 ### Funktionen zur Geometriegenerierung (Geometry Constructors)
@@ -476,14 +435,13 @@ WHERE name = 'United Kingdom';
 ```
 ![](img/update_ST_GeomFromText.png)
 
-### Räumliche Beziehungen und Berechnungen
+## Räumliche Beziehungen und Berechnungen
 
 Ausgabe von Informationen über Ihre Daten wie z.B. Distanz, Fläche, Länge, Mittelpunkt.
 
+## Berechnen der Fläche für jedes Land
+http://postgis.net/docs/ST_Area.html
 
-#### Übung 8: Berechnen Sie die Fläche für jedes Land
-
-* http://postgis.net/docs/ST_Area.html
 * Achtung: Beachten Sie, dass zur Berechnung der Fläche die Einheit der verwendeten Projektion genutzt wird (Bei den Natural Earth II Daten ist dies EPSG 4326 also Grad) Verwenden Sie daher für die Berechnung den Spheroid, um sinnvolle Ergebnisse zu erhalten.
 
 Ohne Verwendung des Spheroids (Ausgabe in den Einheiten des EPSG-Codes)
@@ -504,74 +462,63 @@ SELECT gid, name, st_Area(geom, true) as flaeche
   WHERE name IN ('Germany','Austria','Switzerland') 
   ORDER BY flaeche DESC;
 ```
+<br><br><br>
 
-#### Übung 9: Erzeugen Sie eine Sicht, die den Mittelpunkt jedes Landes ausgibt
-
-* Erzeugen Sie eine Sicht, die den Mittelpunkt jedes Landes ausgibt
-* Laden Sie die Daten in QGIS
+## Übung 8: Erzeugen Sie eine Sicht, die den Mittelpunkt jedes Landes ausgibt
+```
 * Schauen Sie sich die Sicht geometry_columns an. Welcher Geometrietyp und welche Projektion werden angegeben?
-
+```
 ```sql
 CREATE VIEW qry_country_centroid AS
 SELECT gid, name, st_centroid(geom)
   FROM public.ne_10m_admin_0_countries;
 ```
-
-Erzeugen Sie die Sicht erneut und weisen dabei der Geometrie den Typ POINT und den EPSG-Code 4326 zu (Stichwort typecast). Schauen Sie sich die Daten in QGIS an. Wo liegt der Mittelpunkt von Frankreich (France)?
-
+```
+Erzeugen Sie die Sicht erneut und weisen dabei der Geometrie den Typ POINT und den EPSG-Code 4326 zu (Stichwort typecast).
+besser:
+```
 ```sql
 Drop view qry_country_centroid;
 CREATE VIEW qry_country_centroid AS
 SELECT gid, name, st_centroid(geom)::geometry(point,4326) as geom
   FROM public.ne_10m_admin_0_countries;
 ```
-
-Nutzen Sie die Funktion ST_PointOnSurface
-
-```sql
-CREATE VIEW qry_country_pointonsurface AS
-SELECT gid, name, st_pointonsurface(geom)::geometry(point,4326) as geom
-  FROM public.ne_10m_admin_0_countries;
+```
+Schauen Sie sich die Daten in QGIS an. Wo liegt der Mittelpunkt von Frankreich (France)?
 ```
 
-#### Übung 10: Distanzberechnung
-
-* Gehen Sie zurück zur Tabelle **_cities_** aus Übung 4. Berechnen Sie die Entfernung von Ihrem Wohnort nach Berlin.
-* Nutzen Sie dabei den Spheroid für die Berechnung (Nutzung des Typs **_geography_**)
-* https://postgis.net/docs/ST_Distance.html
-
-```sql
-SELECT g.name, myhome.name, ST_Distance(g.geom, myhome.geom, true) 
-FROM cities g, 
-cities myhome 
-WHERE 
-g.name = 'Berlin' 
-AND myhome.name='Cologne';
-```
-
-* Frage: Wer hatte die weiteste und wer die kürzeste Anreise?
-
-![](img/st_distance.png)
-
-![](img/qgis_great_circle.png)
-
-
-### Räumlicher Index
-
-* Ihre Geometriespalte sollte einen räumlichen Index aufweisen - dieser beschleunigt räumliche Abfragen
-* Der räumliche Index speichert zu jeder Geometrie die BoundingBox
-
-```sql
-CREATE INDEX gist_cities_geom
- ON cities 
- USING GIST (geom);
-```
-
-
-### Geometrieprozessierung
-
-* Es gibt zahlreiche Funktionen zur Geometrieprozessierung z.B. Puffern, Verschneiden, Vereinigen, Teilen
-* http://postgis.net/docs/reference.html#Geometry_Processing
+> [!NOTE]
+> ### ST_PointOnSurface
+> liefert einen Punkt, der garantiert innerhalb der zugehörigen Fläche liegt.
+> 
+> ```sql
+> CREATE VIEW qry_country_pointonsurface AS
+> SELECT gid, name, st_pointonsurface(geom)::geometry(point,4326) as geom
+>   FROM public.ne_10m_admin_0_countries;
+> ```
+> 
+> ### Distanzberechnung
+> https://postgis.net/docs/ST_Distance.html
+> 
+> ```sql
+> SELECT g.name, myhome.name, ST_Distance(g.geom, myhome.geom, true) 
+> FROM cities g, 
+> cities myhome 
+> WHERE 
+> g.name = 'Berlin' 
+> AND myhome.name='Cologne';
+> ```
+> 
+> * Frage: Wer hatte die weiteste und wer die kürzeste Anreise?
+> 
+> ![](img/st_distance.png)
+> 
+> ![](img/qgis_great_circle.png)
+> 
+> ### Geometrieprozessierung
+> 
+> * Es gibt zahlreiche Funktionen zur Geometrieprozessierung z.B. Puffern, Verschneiden, Vereinigen, Teilen
+> * http://postgis.net/docs/reference.html#Geometry_Processing
 
 
 #### Übung 11: Puffern Sie die Tabelle populated places mit 10 km
